@@ -1,6 +1,6 @@
 import Person from './Person'
 
-const Persons = (props) => {
+const Persons = ({ persons, newFilterText, deleteEntry }) => {
 
     const filterPersons = (persons, search) => {
         return (persons.filter((person) => person.name.toLowerCase().includes(search.toLowerCase())))
@@ -8,8 +8,8 @@ const Persons = (props) => {
 
     return (
         <ul>
-            {filterPersons(props.persons, props.newFilterText).map(entry =>
-            <Person key={entry.id} entry={entry} />
+            {filterPersons(persons, newFilterText).map(entry =>
+            <Person key={entry.id} entry={entry} deleteEntry={ () => deleteEntry(entry.id)} />
             )}
       </ul>
     )
