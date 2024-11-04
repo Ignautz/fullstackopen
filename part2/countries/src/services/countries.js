@@ -14,8 +14,12 @@ const getOne = (countryName) => {
 }
 
 const getWeather = (country) => {
-    const request = axios.get(`${weatherUrl}lat=${country.latlng[0]}&lon=${country.latlng[1]}&appid=${api_key}`)
-    return request.then(response => response.data)
+    try {
+        const request = axios.get(`${weatherUrl}lat=${country[0].latlng[0]}&lon=${country[0].latlng[1]}&appid=${api_key}`)
+        return request.then(response => response.data)
+    } catch (error) {
+        console.log('no country selected')
+    }
 }
 
 export default { getAll, getOne, getWeather }
