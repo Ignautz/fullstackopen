@@ -8,17 +8,17 @@ app.use(express.static('dist'))
 
 let notes = [
     {
-        id: "1",
+        id: 1,
         content: "HTML is easy",
         important: true
     },
     {
-        id: "2",
+        id: 2,
         content: "Browser can execute only JavaScript",
         important: false
     },
     {
-        id: "3",
+        id: 3,
         content: "GET and POST are the most important methods of HTTP protocol",
         important: true
     }
@@ -33,8 +33,8 @@ app.get('/api/notes', (request, response) => {
 })
 
 app.get('/api/notes/:id', (request, response) => {
-    const id = request.params.id
-    const note = notes.find(note => note.id === id)
+    const id = Number(request.params.id)
+    const note = notes.filter(note => note.id === id)
     if (note) {
         response.json(note)
     } else {
@@ -68,8 +68,28 @@ app.post('/api/notes', (request, response) => {
     response.json(note)
 })
 
+app.put('/api/notes/:id', (request, response) => {
+    const body = request.body
+
+    if(!body.content) {
+        return response.status(400).json({
+            error: 'content missing'
+        })
+    }
+
+    const note = {
+        content: body.content,
+        important: Boolean(body.important) || false,
+        id: body.id,
+    }
+    notes = notes.filter(note => note.id !== body.id)
+    notes = notes.concat(note)
+
+    response.json(note)
+})
+
 app.delete('/api/notes/:id', (request, response) => {
-    const id = request.params.id
+    const id = Number(request.params.id)
     notes = notes.filter(note => note.id !== id)
 
     response.status(204).end()
